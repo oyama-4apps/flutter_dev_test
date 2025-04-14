@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dev_test/auth/otp/ui/otp.page.dart';
+import 'package:flutter_dev_test/auth/repository/auth_repository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,10 +18,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('good luck =]'),
-        ),
+      // home: RepositoryProvider(
+      //   create: (context) => AuthRepository(),
+      //   child: LoginPage(),
+      // ),
+      home: RepositoryProvider(
+        create: (context) => AuthRepository(),
+        child: OtpPage(),
       ),
     );
   }

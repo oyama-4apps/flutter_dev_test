@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dev_test/auth/otp/ui/otp.page.dart';
+import 'package:flutter_dev_test/auth/login/ui/login.page.dart';
 import 'package:flutter_dev_test/auth/repository/auth_repository.dart';
+import 'package:flutter_dev_test/values/app_theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,17 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dev Flutter Test',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      // home: RepositoryProvider(
-      //   create: (context) => AuthRepository(),
-      //   child: LoginPage(),
-      // ),
+      theme: AppTheme.theme,
       home: RepositoryProvider(
         create: (context) => AuthRepository(),
-        child: OtpPage(),
+        child: LoginPage(), //OtpPage(),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_dev_test/auth/login/bloc/login_event.dart';
 import 'package:flutter_dev_test/auth/login/bloc/login_state.dart';
 import 'package:flutter_dev_test/auth/repository/auth_repository.dart';
 import 'package:flutter_dev_test/common/form_submission_status.dart';
+import 'package:flutter_dev_test/values/assets_constants.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -34,12 +35,19 @@ class LoginPage extends StatelessWidget {
       child: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _getImage(),
               _userNameField(),
+              const SizedBox(
+                height: 10,
+              ),
               _passwordField(),
+              const SizedBox(
+                height: 20,
+              ),
               _loginButton(),
             ],
           ),
@@ -52,7 +60,9 @@ class LoginPage extends StatelessWidget {
     return BlocBuilder<LoginBloc, LoginState>(
       builder: (context, state) {
         return TextFormField(
-          decoration: const InputDecoration(hintText: 'UserName'),
+          decoration: const InputDecoration(
+            hintText: 'Email',
+          ),
           validator: (value) => null,
           //  state.isValidUserName ? null : 'Informe o usuário',
           onChanged: (value) => context
@@ -68,7 +78,7 @@ class LoginPage extends StatelessWidget {
       builder: (context, state) {
         return TextFormField(
           obscureText: true,
-          decoration: const InputDecoration(hintText: 'Password'),
+          decoration: const InputDecoration(hintText: 'Senha'),
           validator: (value) => null,
           // state.isValidPassword ? null : 'Informe a senha',
           onChanged: (value) => context
@@ -93,6 +103,12 @@ class LoginPage extends StatelessWidget {
                 child: const Text('Login'),
               );
       },
+    );
+  }
+
+  Widget _getImage() {
+    return Image.asset(
+      AssetConstants.logo,
     );
   }
 

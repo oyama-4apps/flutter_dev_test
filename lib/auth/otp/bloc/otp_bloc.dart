@@ -20,6 +20,6 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
   }
 
   Future<void> requestOtp({required Login login}) async {
-    authRepository.login(login: login);
+    authRepository.requestOtp(login: login);
   }
 }

@@ -8,14 +8,17 @@ import 'package:http/http.dart' as http;
 class AuthService {
   final http.Client httpClient = http.Client();
 
-  final String baseUrl = 'http://127.0.0.1:5000';
-  final Map<String, String>? baseHeaders = {};
+  final String baseUrl = 'http://10.0.2.2:5000';
+  final Map<String, String>? baseHeaders = {
+    'Content-Type': 'application/json',
+    'accept': '*'
+  };
 
   Future<RecoverySecretMapper> requestOtpCode({required Login login}) async {
     final http.Response response = await httpClient.post(
         Uri.parse('$baseUrl/auth/recovery-secret'),
         headers: baseHeaders,
-        body: login.toJsonRecovery());
+        body: jsonEncode(login.toJsonRecovery()));
 
     if (response.statusCode == 200) {
       return RecoverySecretMapper.fromJson(jsonDecode(response.body));
@@ -28,7 +31,7 @@ class AuthService {
     final http.Response response = await httpClient.post(
         Uri.parse('$baseUrl/auth/login'),
         headers: baseHeaders,
-        body: login.toJsonRecovery());
+        body: jsonEncode(login.toJsonRecovery()));
 
     if (response.statusCode == 200) {
       return true;

@@ -26,7 +26,11 @@ final GoRouter _router = GoRouter(
           name: 'otppage',
           builder: (BuildContext context, GoRouterState state) {
             return RepositoryProvider(
-                create: (context) => AuthRepository(), child: OtpPage());
+              create: (context) => AuthRepository(),
+              child: OtpPage(
+                login: state.extra as Login,
+              ),
+            );
           },
         ),
         GoRoute(

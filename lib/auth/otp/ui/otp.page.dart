@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dev_test/auth/login/model/domain/login.dart';
 import 'package:flutter_dev_test/auth/otp/bloc/otp_bloc.dart';
 import 'package:flutter_dev_test/auth/otp/bloc/otp_event.dart';
 import 'package:flutter_dev_test/auth/otp/bloc/otp_state.dart';
 import 'package:flutter_dev_test/auth/repository/auth_repository.dart';
 import 'package:flutter_dev_test/common/form_submission_status.dart';
+import 'package:flutter_dev_test/common/utils/otp_util.dart';
 
 class OtpPage extends StatelessWidget {
-  OtpPage({super.key});
+  OtpPage({super.key, required this.login});
 
   final _formKey = GlobalKey<FormState>();
+  final Login login;
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +86,10 @@ class OtpPage extends StatelessWidget {
         return TextFormField(
             maxLength: 1,
             textAlign: TextAlign.center,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(
                 border: InputBorder.none, counterText: ''),
             validator: (value) => _getValidator(state: state, fieldId: fieldId),
-            //  state.isValidUserName ? null : 'Informe o usuário',
             onChanged: (value) {
               context.read<OtpBloc>().add(_getOtpEvent(fieldId, value));
               if (value.length == 1) {
@@ -104,9 +107,21 @@ class OtpPage extends StatelessWidget {
   }
 
   Widget _confirmButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      child: const Text('Confirmar'),
+    return BlocBuilder<OtpBloc, OtpState>(
+      builder: (context, state) {
+        return state.formStatus is Submitting
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    login.code =
+                        '${state.otp1}${state.otp2}${state.otp3}${state.otp4}${state.otp5}${state.otp6}';
+                    context.read<OtpBloc>().requestOtp(login: login);
+                  }
+                },
+                child: const Text('Login'),
+              );
+      },
     );
   }
 

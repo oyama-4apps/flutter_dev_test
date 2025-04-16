@@ -99,13 +99,12 @@ class LoginPage extends StatelessWidget {
             : ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    final login = Login(
+                        username: state.username, password: state.password);
                     if (context.read<LoginBloc>().state.code.isEmpty) {
-                      context.pushNamed('otppage');
+                      context.pushNamed('otppage', extra: login);
                     } else {
-                      context.read<LoginBloc>().login(
-                          login: Login(
-                              username: state.username,
-                              password: state.password));
+                      context.read<LoginBloc>().login(login: login);
                     }
                   }
                 },

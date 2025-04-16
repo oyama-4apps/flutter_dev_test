@@ -81,14 +81,24 @@ class OtpPage extends StatelessWidget {
     return BlocBuilder<OtpBloc, OtpState>(
       builder: (context, state) {
         return TextFormField(
-          maxLength: 1,
-          textAlign: TextAlign.center,
-          //   decoration: const InputDecoration(hintText: 'UserName'),
-          validator: (value) => null,
-          //  state.isValidUserName ? null : 'Informe o usuário',
-          onChanged: (value) =>
-              context.read<OtpBloc>().add(_getOtpEvent(fieldId, value)),
-        );
+            maxLength: 1,
+            textAlign: TextAlign.center,
+            decoration: const InputDecoration(
+                border: InputBorder.none, counterText: ''),
+            validator: (value) => _getValidator(state: state, fieldId: fieldId),
+            //  state.isValidUserName ? null : 'Informe o usuário',
+            onChanged: (value) {
+              context.read<OtpBloc>().add(_getOtpEvent(fieldId, value));
+              if (value.length == 1) {
+                if (fieldId < 6) {
+                  FocusScope.of(context).nextFocus();
+                }
+              } else {
+                if (fieldId > 1) {
+                  FocusScope.of(context).previousFocus();
+                }
+              }
+            });
       },
     );
   }
@@ -119,6 +129,23 @@ class OtpPage extends StatelessWidget {
         return Opt5Changed(otp5: value);
       default:
         return Opt6Changed(otp6: value);
+    }
+  }
+
+  String? _getValidator({required OtpState state, required int fieldId}) {
+    switch (fieldId) {
+      case 1:
+        return state.isOtp1Valid ? null : ' ';
+      case 2:
+        return state.isOtp2Valid ? null : ' ';
+      case 3:
+        return state.isOtp3Valid ? null : ' ';
+      case 4:
+        return state.isOtp4Valid ? null : ' ';
+      case 5:
+        return state.isOtp5Valid ? null : ' ';
+      default:
+        return state.isOtp6Valid ? null : ' ';
     }
   }
 }

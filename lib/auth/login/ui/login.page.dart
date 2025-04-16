@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dev_test/auth/login/bloc/login_bloc.dart';
 import 'package:flutter_dev_test/auth/login/bloc/login_event.dart';
 import 'package:flutter_dev_test/auth/login/bloc/login_state.dart';
+import 'package:flutter_dev_test/auth/login/model/domain/login.dart';
 import 'package:flutter_dev_test/auth/repository/auth_repository.dart';
 import 'package:flutter_dev_test/common/form_submission_status.dart';
 import 'package:flutter_dev_test/values/assets_constants.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -63,8 +65,8 @@ class LoginPage extends StatelessWidget {
           decoration: const InputDecoration(
             hintText: 'Email',
           ),
-          validator: (value) => null,
-          //  state.isValidUserName ? null : 'Informe o usuário',
+          validator: (value) =>
+              state.isValidUserName ? null : 'Informe o usuário',
           onChanged: (value) => context
               .read<LoginBloc>()
               .add(LoginUsernameChanged(username: value)),
@@ -79,8 +81,8 @@ class LoginPage extends StatelessWidget {
         return TextFormField(
           obscureText: true,
           decoration: const InputDecoration(hintText: 'Senha'),
-          validator: (value) => null,
-          // state.isValidPassword ? null : 'Informe a senha',
+          validator: (value) =>
+              state.isValidPassword ? null : 'Informe a senha',
           onChanged: (value) => context
               .read<LoginBloc>()
               .add(LoginPasswordChanged(password: value)),
@@ -97,7 +99,14 @@ class LoginPage extends StatelessWidget {
             : ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    context.read<LoginBloc>().add(LoginSubmitted());
+                    if (context.read<LoginBloc>().state.code.isEmpty) {
+                      context.pushNamed('otppage');
+                    } else {
+                      context.read<LoginBloc>().login(
+                          login: Login(
+                              username: state.username,
+                              password: state.password));
+                    }
                   }
                 },
                 child: const Text('Login'),
